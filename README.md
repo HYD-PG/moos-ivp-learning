@@ -61,82 +61,82 @@
 -----------------------------------------------------------------------------------------------------------------------------------
 -设置发布新的变量：
 -1.首先通过打开目录moos-ivp-extend/src      创建文件名称：MyGenMOOSApp 文件名 p "作者名"
-2.打开文件目录moos-ivp-extend/src/CMakeLists.txt打开这个txt文件，添加ADD_SUBDIRECTORY(文件名)
-3.cd ~/moos-ivp-extend   ./build.sh进行编译运行
-4.从src进入到其中的文件，找到后缀名为.h的文档进行变量的添加  eg:int m_value;并进行保存
-5.然后打开后缀名为.cpp的文件，在Constructor中对初始变量赋值（或者利用后面的mission文件中的事件event命令进行修改赋值，此项往往被使用）并在RegisterVariables()中进行订阅变量Register("变量名"，0)
-6.在OnNewMail()中编写判断条件或者运行数学逻辑，利用Notify函数进行发布（个人认为此函数写在Iterate中也可以）
-7.打开moos-ivp-extend中的build文件，输入cmake,运行后再输入make进行运行
-8.启动MOOSDB，查看启动后的状态可以使用指令：uXMS --all(一直启动即可)
-//uPokeDB:可以更改MOOSDB中的其他变量   eg:uPokeDB 变量赋值 文件名.moos//（此项可有可无，只是可利用其进行变量的修改）
-但是如上面所示：输入指令时需要挨个打开终端比较麻烦，因此可以使用指令pAntler:
-首先利用vi或者vim创立一个mission文件，具体方法为输入：vi 文件名
-然后在其中将运行的数量和代码写入其中eg:
-// (wget http://oceanai.mit.edu/2.680/examples/db_and_uxms.moos)
-ServerHost = localhost//IP地址
-ServerPort = 9000//端口
-Community = alpha
-ProcessConfig = ANTLER
-{
-MSBetweenLaunches = 200
-Run = MOOSDB  @ NewConsole = false
-Run = uXMS  @ NewConsole = true//运行的两个指令
-Run = uTimerScript @ NewConsole = false //可添加
-Run=自己所建文件
-}
-ProcessConfig = uXMS
-{
-AppTick  = 4
-CommsTick = 4
-VAR  = DB_CLIENTS, DB_UPTIME, DB_TIME
-vent = var=NUM_VALUE, val="22", time = 0.50
-   event = var=NUM_VALUE, val="234", time = 1.00
-   event = var=NUM_VALUE, val="117", time = 1.50
-   reset_max = nolimit
-   reset_time = all-posted//输入事件，以上为例子，可进行更改
-}
-9.pAntler 文件名.moos,查看控制台输出指令
-------------------------------------------------
-查看日志：aloggrep MOOSLog_27_10_2020_____09_22_24.alog NUM_RESULT NUM_VALUE
--------------------------------------------------------------------------------------------------------------------------------------------
-配置helm文件（自动驾驶）：
-mkdir moos-ivp-jsmith/missions/lab_07
-cd moos-ivp-jsmith/missions/lab07/s1_alpha
-pAntler --MOOSTimeWarp=10 alpha.moos
+-2.打开文件目录moos-ivp-extend/src/CMakeLists.txt打开这个txt文件，添加ADD_SUBDIRECTORY(文件名)
+-3.cd ~/moos-ivp-extend   ./build.sh进行编译运行
+-4.从src进入到其中的文件，找到后缀名为.h的文档进行变量的添加  eg:int m_value;并进行保存
+-5.然后打开后缀名为.cpp的文件，在Constructor中对初始变量赋值（或者利用后面的mission文件中的事件event命令进行修改赋值，此项往往被使用）并在RegisterVariables()中进行订阅变量Register("变量名"，0)
+-6.在OnNewMail()中编写判断条件或者运行数学逻辑，利用Notify函数进行发布（个人认为此函数写在Iterate中也可以）
+-7.打开moos-ivp-extend中的build文件，输入cmake,运行后再输入make进行运行
+-8.启动MOOSDB，查看启动后的状态可以使用指令：uXMS --all(一直启动即可)
+-//uPokeDB:可以更改MOOSDB中的其他变量   eg:uPokeDB 变量赋值 文件名.moos//（此项可有可无，只是可利用其进行变量的修改）
+-但是如上面所示：输入指令时需要挨个打开终端比较麻烦，因此可以使用指令pAntler:
+-首先利用vi或者vim创立一个mission文件，具体方法为输入：vi 文件名
+-然后在其中将运行的数量和代码写入其中eg:
+-// (wget http://oceanai.mit.edu/2.680/examples/db_and_uxms.moos)
+-ServerHost = localhost//IP地址
+-ServerPort = 9000//端口
+-Community = alpha
+-ProcessConfig = ANTLER
+-{
+-MSBetweenLaunches = 200
+-Run = MOOSDB  @ NewConsole = false
+-Run = uXMS  @ NewConsole = true//运行的两个指令
+-Run = uTimerScript @ NewConsole = false //可添加
+-Run=自己所建文件
+-}
+-ProcessConfig = uXMS
+-{
+-AppTick  = 4
+-CommsTick = 4
+-VAR  = DB_CLIENTS, DB_UPTIME, DB_TIME
+-vent = var=NUM_VALUE, val="22", time = 0.50
+   -event = var=NUM_VALUE, val="234", time = 1.00
+   -event = var=NUM_VALUE, val="117", time = 1.50
+   -reset_max = nolimit
+   -reset_time = all-posted//输入事件，以上为例子，可进行更改
+-}
+-9.pAntler 文件名.moos,查看控制台输出指令
+-------------------------------------------------
+-查看日志：aloggrep MOOSLog_27_10_2020_____09_22_24.alog NUM_RESULT NUM_VALUE
+--------------------------------------------------------------------------------------------------------------------------------------------
+-配置helm文件（自动驾驶）：
+-mkdir moos-ivp-jsmith/missions/lab_07
+-cd moos-ivp-jsmith/missions/lab07/s1_alpha
+-pAntler --MOOSTimeWarp=10 alpha.moos
+-
+-Behavior=BHV_Loiter
+-{
+-name = east_zone
+  -pwt  = 100
 
-Behavior=BHV_Loiter
-{
-  name = east_zone
-  pwt  = 100
+  -condition = DEPLOY = true
+  -condition = RETURN = false
+  -condition = LOITER_REGION=east
+  -updates    = LOITER_UPDATE
+ - duration = 150  //行为执行150s后，行为结束
+ - endflag=LOITER_REGION=west//换区域
+ - duration_idle_decay = false
+- perpetual  = true
 
-  condition = DEPLOY = true
-  condition = RETURN = false
-  condition = LOITER_REGION=east
-  updates    = LOITER_UPDATE
-  duration = 150  //行为执行150s后，行为结束
-  endflag=LOITER_REGION=west//换区域
-  duration_idle_decay = false
-  perpetual  = true
+ - // 题目要求的相关参数设定
+  - // ------------------------------------
+  -    acquire_dist = 10               // default
+  -    capture_radius = 3                // default  
+  -    center_activate = false            // default
+  -    clockwise = false             // default
+  -    slip_radius = 15               // default
+ -    speed = 1.3                // default
+  -    spiral_factor = -2               // default
 
-  // 题目要求的相关参数设定
-   // ------------------------------------
-      acquire_dist = 10               // default
-      capture_radius = 3                // default  
-      center_activate = false            // default
-      clockwise = false             // default
-      slip_radius = 15               // default
-      speed = 1.3                // default
-      spiral_factor = -2               // default
-
-      polygon = radial:: x=120, y=-75, radius=20, pts=8 // 重心、半径、定点数
-      post_suffix = HENRY                             // example
+  -    polygon = radial:: x=120, y=-75, radius=20, pts=8 // 重心、半径、定点数
+ -     post_suffix = HENRY                             // example
 
 
-  // 在界面上画出相关的图形
-        visual_hints = vertex_size  = 1             // default
-        visual_hints = edge_size    = 1             // default
-        visual_hints = vertex_color = dodger_blue   // default
-        visual_hints = edge_color   = white         // default
+-  // 在界面上画出相关的图形
+   -     visual_hints = vertex_size  = 1             // default
+   -     visual_hints = edge_size    = 1             // default
+   -     visual_hints = vertex_color = dodger_blue   // default
+    -    visual_hints = edge_color   = white         // default
         visual_hints = nextpt_color = yellow        // default
         visual_hints = nextpt_lcolor = aqua         // default
         visual_hints = nextpt_vertex_size = 5       // default
